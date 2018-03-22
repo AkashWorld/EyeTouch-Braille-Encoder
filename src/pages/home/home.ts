@@ -106,7 +106,6 @@ declare let BrailleKeys:any;
       }
       let value = Braille.BrailleMap.get(key);
       let strVal = Braille.ConvertKeyToPaddedString(value)
-      this.btStatus = "Attempting to write: " + key + " as String: " + strVal;
       this.bluetoothSerial.write(strVal).then(function(){console.log("Write successful.")},function(){console.log("Write failed.")})
     }
 
