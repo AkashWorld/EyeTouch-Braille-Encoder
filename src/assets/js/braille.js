@@ -103,13 +103,14 @@ export let BrailleMap = new Map();
       return;
     }
     if(key > 255 || key < 0){
+      console.log("Key is out of range scope.")
       return;
     }
     var retStr = key.toString();
     while(retStr.length < 3){
       retStr = "0".concat(retStr)
     }
-    console.log(retStr)
+    console.log("Key converted to: " + retStr)
     return retStr;
 
 
@@ -120,15 +121,11 @@ export let BrailleMap = new Map();
    * @param {*} key Number from 0 to 255
    */
   export function ConvertKeyToEightBits(key){
-    if(!Number.isInteger(key)){
-      console.log("Key " +key+" is not an integer.")
-      return;
-    }
     if(key > 255 || key < 0){
       return;
     }
     let numberArr = new Uint8Array(1);
-    numberArr.push(key);
+    numberArr[0] = key;
     return numberArr;
   }
 

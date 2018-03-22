@@ -16,14 +16,16 @@ declare let BrailleKeys:any;
     btStatus = "Not connected."
 
     constructor(public toastCtrl: ToastController, public bluetoothSerial: BluetoothSerial){
-      this.DEVICE_NAME = "BRAILLE";
       console.log("HomePage controller")
       console.log(Braille.BrailleMap)
       console.log(this.BrailleKeys)
       this.TurnOnBluetooth();
     }
 
-    //OnClick()=> Method that turns on bluetooth
+    /**
+     * Checks if bluetooth is on, and turns it on if not. After, it starts the
+     * sequence to connect to the BRAILLE bluetooth module.
+     */
     TurnOnBluetooth(){
       console.log("Initializing bluetooth connection sequence...")
       this.bluetoothSerial.isEnabled().then(()=>this.DeviceIsEnabled(),()=>this.EnableDevice());
@@ -39,6 +41,7 @@ declare let BrailleKeys:any;
     DeviceIsEnabled(){
       console.log("Bluetooth is enabled...")
       this.isBTEnabled = true;
+      this.FindBrailleDeviceSequence();
     }
 
     DeviceIsDisabled(){
@@ -46,8 +49,8 @@ declare let BrailleKeys:any;
       this.isBTEnabled = false;
     }
 
-    //OnClick() => Find nearby braille devices
-    FindBrailleDeviceOnClick(){
+
+    FindBrailleDeviceSequence(){
       this.btStatus = "Attempting to pair with Braille device..."
       if(this.isBTEnabled){
         this.bluetoothSerial.discoverUnpaired().then((Devices)=>this.FindBrailleDevice(Devices),function(){console.log("Unable to list unpaired devices.")})
@@ -84,6 +87,7 @@ declare let BrailleKeys:any;
       this.brailleDevice = null;
       console.log("Disconnected from BRAILLE device...")
       this.btStatus = "Not connected."
+      this.TurnOnBluetooth();
     }
 
     OnButtonClick(key){
@@ -92,10 +96,13 @@ declare let BrailleKeys:any;
       this.presentToast('Button value: ' + Braille.BrailleMap.get(key));
       if(!this.isConnectedToDevice || this.brailleDevice == null){
         console.log("Not connected to device...")
+        this.TurnOnBluetooth();
         return;
       }
-      this.btStatus = "Attempting to write: " + key
-      this.bluetoothSerial.write(Braille.BrailleMap.get(key)).then(function(){console.log("Write successful.")},function(){console.log("Write failed.")})
+      let value = Braille.BrailleMap.get(key);
+      let strVal = Braille.ConvertKeyToPaddedString(value)
+      this.btStatus = "Attempting to write: " + key + " as String: " + strVal;
+      this.bluetoothSerial.write(strVal).then(function(){console.log("Write successful.")},function(){console.log("Write failed.")})
     }
 
 /**

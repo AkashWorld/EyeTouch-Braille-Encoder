@@ -12,6 +12,7 @@
       {{ key }}
     </button>
   </ion-list>
-  <button ion-button (click)="FindBrailleDeviceOnClick()">Connect to Braille Device</button>
+  <button ion-button (click)="TurnOnBluetooth()">Connect to Braille Device</button>
   <ion-label>{{btStatus}}</ion-label>
+  <ion-spinner name='crescent' *ngIf="isConnectedToDevice == false"></ion-spinner>
 </ion-content>
