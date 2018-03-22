@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, ToastController } from 'ionic-angular';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 import * as Braille from '../../assets/js/braille.js'
+import { NgZone } from '@angular/core';
 declare let BrailleKeys:any;
 @Component({
   selector: 'page-home',
@@ -15,7 +16,7 @@ declare let BrailleKeys:any;
     isConnectedToDevice = false;
     btStatus = "Not connected."
 
-    constructor(public toastCtrl: ToastController, public bluetoothSerial: BluetoothSerial){
+    constructor(public toastCtrl: ToastController, public bluetoothSerial: BluetoothSerial, public ngZone: NgZone){
       console.log("HomePage controller")
       console.log(Braille.BrailleMap)
       console.log(this.BrailleKeys)
@@ -73,13 +74,17 @@ declare let BrailleKeys:any;
       }
       if(this.brailleDevice == null){
         console.log("Error finding Braille Bluetooth module!")
+        this.FindBrailleDeviceSequence();
       }
     }
 
     ConnectedToDevice(){
-      this.isConnectedToDevice = true;
       console.log("Connected to BRAILLE device...")
-      this.btStatus = "Braille device connected!"
+      this.ngZone.run(() => {
+        //Asynchronous promise
+        this.isConnectedToDevice = true;
+        this.btStatus = "Braille device connected!"
+      });
     }
 
     DisonnectedFromDevice(){
