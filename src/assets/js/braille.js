@@ -1,3 +1,5 @@
+import { concat } from "rxjs/operator/concat";
+
 export let BrailleMap = new Map();
     BrailleMap.set('a', 128)
     BrailleMap.set('b', 192)
@@ -90,5 +92,61 @@ export let BrailleMap = new Map();
     return Array.from(map.keys());
   }
 
+/**
+ * Converts the input number 'key' to a string of length three, padding
+ * with zeros if nessesary
+ * @param {*} key Number from 0 to 255
+ */
+  export function ConvertKeyToPaddedString(key){
+    if(!Number.isInteger(key)){
+      console.log("Key " +key+" is not an integer.")
+      return;
+    }
+    if(key > 255 || key < 0){
+      return;
+    }
+    var retStr = key.toString();
+    while(retStr.length < 3){
+      retStr = "0".concat(retStr)
+    }
+    console.log(retStr)
+    return retStr;
+
+
+  }
+
+  /**
+   * Converts an integer into a Uint8Array
+   * @param {*} key Number from 0 to 255
+   */
+  export function ConvertKeyToEightBits(key){
+    if(!Number.isInteger(key)){
+      console.log("Key " +key+" is not an integer.")
+      return;
+    }
+    if(key > 255 || key < 0){
+      return;
+    }
+    let numberArr = new Uint8Array(1);
+    numberArr.push(key);
+    return numberArr;
+  }
+
+  /**
+   * Converts a group of four integers into an Uint8Array of size four
+   * @param {*} keys Array of integers
+   */
+  export function ConvertKeysToEightBitArray(keys){
+    if(!Array.isArray(keys) || keys.size > 4){
+      console.log("Input is not an array or is too long.")
+      return;
+    }
+    let numberArr = new Uint8Array(4);
+    for(let i = 0; i < keys.size; i++){
+      numberArr[i] = keys[i]
+    }
+    console.log(numberArr)
+    return numberArr;
+  }
 
 
