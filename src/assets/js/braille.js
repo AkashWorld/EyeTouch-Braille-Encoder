@@ -54,8 +54,10 @@ export let BrailleMap = new Map();
         return bin;
   }
 
-  export function BinaryToBrailleConsole(binary){
+  export function BinaryToBrailleConsole(input){
+    let binary = DecimalToBinary(number)
     let bin_digits = [];
+    let retStrArr = [];
     let strBin = binary.toString();
     for(let i = 0, len = strBin.length; i < len; i++){
         bin_digits.push(+strBin.charAt(i));
@@ -74,8 +76,10 @@ export let BrailleMap = new Map();
         else{
             bindots += " "
         }
+        retStrArr.push(bindots)
         console.log(bindots)
     }
+    return retStrArr
   }
 
 

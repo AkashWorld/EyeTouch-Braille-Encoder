@@ -88,10 +88,13 @@ declare let BrailleKeys:any;
     }
 
     DisonnectedFromDevice(){
-      this.isConnectedToDevice = false;
-      this.brailleDevice = null;
+      this.ngZone.run(()=>{
+        //Asynchronous promise
+        this.isConnectedToDevice = false;
+        this.btStatus = "Not connected."
+      });
       console.log("Disconnected from BRAILLE device...")
-      this.btStatus = "Not connected."
+      this.brailleDevice = null;
       this.TurnOnBluetooth();
     }
 
