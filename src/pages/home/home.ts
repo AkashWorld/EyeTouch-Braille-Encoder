@@ -15,6 +15,7 @@ declare let BrailleKeys:any;
     isBTEnabled = false;
     isConnectedToDevice = false;
     btStatus = "Not connected."
+    inputValue = "";
 
     constructor(public toastCtrl: ToastController, public bluetoothSerial: BluetoothSerial, public ngZone: NgZone){
       console.log("HomePage controller")
@@ -110,6 +111,25 @@ declare let BrailleKeys:any;
       let strVal = Braille.ConvertKeyToPaddedString(value)
       while(strVal.length < 12){
         strVal = strVal.concat('0');
+      }
+      this.presentToast('Writing value: ' + strVal);
+      this.bluetoothSerial.write(strVal).then(function(){console.log("Write successful.")},function(){console.log("Write failed.")})
+    }
+
+    SendInputMessage(){
+      console.log('Attempting to send value: ' + this.inputValue);
+      if(!this.isConnectedToDevice || this.brailleDevice == null){
+        console.log("Not connected to device...")
+        this.TurnOnBluetooth();
+        return;
+      }
+      let strVal = "";
+      for(let i = this.inputValue.length - 1; i >= 0; i--){
+        let val = Braille.BrailleMap.get(this.inputValue.charAt(i))
+        strVal = strVal.concat(Braille.ConvertKeyToPaddedString(val))
+      }
+      while(strVal.length < 12){
+        strVal = '0'.concat(strVal);
       }
       this.presentToast('Writing value: ' + strVal);
       this.bluetoothSerial.write(strVal).then(function(){console.log("Write successful.")},function(){console.log("Write failed.")})

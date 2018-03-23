@@ -121,5 +121,12 @@ export let BrailleMap = new Map();
   }
 
 
+  export function reverseString(str) {
+    let array = str.split("");
+    array.reverse();
+    str = array.join('');
+    return str;
+   }
+
 
 
