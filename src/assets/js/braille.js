@@ -45,6 +45,7 @@ export let BrailleMap = new Map();
     BrailleMap.set('7',216);
     BrailleMap.set('8',200);
     BrailleMap.set('9',80);
+    BrailleMap.set(' ', 0);
 
 
   //Helper function to convert decimal to it's binary representation
@@ -127,6 +128,63 @@ export let BrailleMap = new Map();
     str = array.join('');
     return str;
    }
+
+   //Main method to convert string to braille
+   export function convertStringToBraille(inputString){
+     if(!inputString || typeof(inputString) != "string"){
+       console.log("Input is not a string or undefined.")
+     }
+    let BrailleStr = ""; /*Final return output with the braille encodings*/
+    let currToken = ""; /*Current token/word being worked on inside the main look*/
+    for(let i = 0; i < inputString.length; i++){ /*Main parsing loop*/
+      currChar = inputString.charAt(i);
+      if(currChar != " "){/** If the current character is a letter/punctuation */
+        let brailleChars = GetBrailleEncoding(currChar);
+        if(!brailleChar){
+          currToken = currToken.concat(brailleChars);
+        }
+        else{
+          console.log("Could not receive Braille mapping for " + currChar);
+        }
+      }
+      else if(currChar == " " || i == (inputString.length - 1)){ /**If end of string is reached or a space is encountered*/
+        /** Append the current token to the BrailleStr, and empty the token. */
+        BrailleStr.concat(currToken);
+        currToken = "";
+      }
+    }
+    console.log("Final braille string is: \n" + BrailleStr);
+    return BrailleStr;
+   }
+
+   /**
+    * This method translates characters to it's appropriate Braille encoding.
+    * @param {A single character input (String)} inputChar
+    */
+   function GetBrailleEncoding(inputChar){
+    if(!inputChar || typeof(inputChar) != 'string' || inputChar.length != 1){
+      console.log("Input Character is not a type of String.");
+      return;
+    }
+    let RetBrailleStr = "";
+    if(!isNaN(inputChar*1)){/**Check if character is a number */
+      RetBrailleStr.concat(BrailleMap.get('#'));
+      RetBrailleStr.concat(BrailleMap.get(inputChar));
+
+    }
+    else{/**Character is a letter */
+      if(inputChar == inputChar.toUpperCase){
+        RetBrailleStr.concat(BrailleMap.get('CAP'));
+        RetBrailleStr.concat(BrailleMap.get(inputChar));
+      }
+      else{
+        RetBrailleStr.concat(BrailleMap.get(inputChar));
+      }
+    }
+    return RetBrailleStr;
+   }
+
+
 
 
 
