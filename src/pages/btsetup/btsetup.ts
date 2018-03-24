@@ -1,26 +1,20 @@
 import { Component } from '@angular/core';
 import { NavController, ToastController } from 'ionic-angular';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
-import * as Braille from '../../assets/js/braille.js'
 import { NgZone } from '@angular/core';
-declare let BrailleKeys:any;
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html'
+  selector: 'page-btsetup',
+  templateUrl: 'btsetup.html'
 })
-  export class HomePage {
-    BrailleKeys = Braille.GetKeysFromMap(Braille.BrailleMap);
+  export class BTsetupPage {
     DEVICE_NAME = "BRAILLE";
     brailleDevice = null;
     isBTEnabled = false;
     isConnectedToDevice = false;
     btStatus = "Not connected."
-    inputValue = "";
 
     constructor(public toastCtrl: ToastController, public bluetoothSerial: BluetoothSerial, public ngZone: NgZone){
-      console.log("HomePage controller")
-      console.log(Braille.BrailleMap)
-      console.log(this.BrailleKeys)
+      console.log("BTsetupPage controller")
       this.TurnOnBluetooth();
     }
 
@@ -99,41 +93,7 @@ declare let BrailleKeys:any;
       this.TurnOnBluetooth();
     }
 
-    OnButtonClick(key){
-      console.log('Button pressed: ' + key);
-      console.log('Button value: ' + Braille.BrailleMap.get(key));
-      if(!this.isConnectedToDevice || this.brailleDevice == null){
-        console.log("Not connected to device...")
-        this.TurnOnBluetooth();
-        return;
-      }
-      let value = Braille.BrailleMap.get(key);
-      let strVal = Braille.ConvertKeyToPaddedString(value)
-      while(strVal.length < 12){
-        strVal = strVal.concat('0');
-      }
-      this.presentToast('Writing value: ' + strVal);
-      this.bluetoothSerial.write(strVal).then(function(){console.log("Write successful.")},function(){console.log("Write failed.")})
-    }
 
-    SendInputMessage(){
-      console.log('Attempting to send value: ' + this.inputValue);
-      if(!this.isConnectedToDevice || this.brailleDevice == null){
-        console.log("Not connected to device...")
-        this.TurnOnBluetooth();
-        return;
-      }
-      let strVal = "";
-      for(let i = this.inputValue.length - 1; i >= 0; i--){
-        let val = Braille.BrailleMap.get(this.inputValue.charAt(i))
-        strVal = strVal.concat(Braille.ConvertKeyToPaddedString(val))
-      }
-      while(strVal.length < 12){
-        strVal = '0'.concat(strVal);
-      }
-      this.presentToast('Writing value: ' + strVal);
-      this.bluetoothSerial.write(strVal).then(function(){console.log("Write successful.")},function(){console.log("Write failed.")})
-    }
 
 /**
  * Toast UI function method
