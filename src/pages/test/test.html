@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Braille Buttons
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-label>{{btStatus}}</ion-label>
+  <ion-list>
+    <button ion-button *ngFor="let key of BrailleKeys" (click)="OnButtonClick(key)">
+      {{ key }}
+    </button>
+  </ion-list>
+  <ion-item>
+    <ion-label color="primary">Enter Input</ion-label>
+    <ion-input [(ngModel)] = "inputValue"></ion-input>
+  </ion-item>
+  <button ion-button round (click)="SendInputMessage()">SEND</button>
+  <button ion-button round (click)="TurnOnBluetooth()" *ngIf="isConnectedToDevice == false">Connect to Braille Device</button>
+  <ion-spinner name='crescent' *ngIf="isConnectedToDevice == false"></ion-spinner>
+  <button ion-button round (click)="OnReverseToggle()">Reverse Order</button>
+  <ion-label>{{"Braille Order Reversed: " + isReverseBraille}}</ion-label>
+</ion-content>
