@@ -38,8 +38,8 @@ import {Storage} from '@ionic/storage'
     OnButtonClick(key){
       console.log('Button pressed: ' + key);
       console.log('Button value: ' + Braille.BrailleMap.get(key));
-      TextHolder.SetBrailleText(key);
-      let strVal = TextHolder.GetASetOfBrailleText(true);
+      TextHolder.brailleHolder.SetBrailleText(key);
+      let strVal = TextHolder.brailleHolder.GetASetOfBrailleText(true);
       console.log(TextHolder.brailleHolder);
       if(this.isReverseBraille){
         strVal = Braille.reverseBrailleEncoding(strVal);
@@ -50,8 +50,8 @@ import {Storage} from '@ionic/storage'
 
     SendInputMessage(){
       console.log('Attempting to send value: ' + this.inputValue);
-      TextHolder.SetBrailleText(this.inputValue);
-      let strVal = TextHolder.GetASetOfBrailleText(true);
+      TextHolder.brailleHolder.SetBrailleText(this.inputValue);
+      let strVal = TextHolder.brailleHolder.GetASetOfBrailleText(true);
       if(this.isReverseBraille){
         strVal = Braille.reverseBrailleEncoding(strVal);
       }
