@@ -1,2 +1,0 @@
-let assert = require('assert')
-

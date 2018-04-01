@@ -129,10 +129,31 @@ export let BrailleMap = new Map();
     return str;
    }
 
+
+
+   export function reverseBrailleEncoding(BrailleEncStr){
+      if(!BrailleEncStr || typeof(BrailleEncStr) != 'string' ||
+      BrailleEncStr.length % 3 != 0){
+        console.log("Invalid input for reverseBrailleEncoding. Input is either not a string or the length is not a factor of 3.");
+        console.log("Braille String Length % 3 = " + (BrailleEncStr.length % 3));
+        console.log("Type of Braille String: " + typeof(BrailleEncStr));
+        return null;
+      }
+      let retStr = "";
+      for(let i = BrailleEncStr.length; i >= 0; i = i - 3){
+        let EndINdex = i; let StartIndex = i - 3;
+        retStr += BrailleEncStr.substring(StartIndex, EndINdex);
+      }
+      return retStr;
+   }
+
+
+
    //Main method to convert string to braille
    export function convertStringToBraille(inputString){
      if(!inputString || typeof(inputString) != "string"){
        console.log("Input is not a string or undefined.")
+       return null;
      }
     let BrailleStr = ""; /*Final return output with the braille encodings*/
     let currToken = ""; /*Current token/word being worked on inside the main look*/
@@ -145,6 +166,8 @@ export let BrailleMap = new Map();
         }
         else{
           console.log("Could not receive Braille mapping for " + currChar);
+          let brailleChar = GetBrailleEncoding(" ");
+          currToken = currToken.concat(brailleChar);
         }
       }
       else if(currChar == " " || i == (inputString.length - 1)){ /**If end of string is reached or a space is encountered*/

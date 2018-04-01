@@ -3,6 +3,8 @@ import { NavController, ToastController } from 'ionic-angular';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 import * as Braille from '../../assets/js/braille.js'
 import { NgZone } from '@angular/core';
+import {Storage} from '@ionic/storage'
+
 declare let BrailleKeys:any;
 @Component({
   selector: 'page-test',
@@ -14,13 +16,23 @@ declare let BrailleKeys:any;
     brailleDevice = null;
     isBTEnabled = false;
     isConnectedToDevice = false;
+    isReverseBraille = false;
     btStatus = "Not connected."
     inputValue = "";
 
-    constructor(public toastCtrl: ToastController, public bluetoothSerial: BluetoothSerial, public ngZone: NgZone){
+    constructor(public toastCtrl: ToastController, public bluetoothSerial: BluetoothSerial,
+       public ngZone: NgZone, public storage: Storage){
       console.log("HomePage controller")
       console.log(Braille.BrailleMap)
       console.log(this.BrailleKeys)
+      this.storage.get('reverseBraille').then((value)=>{
+        console.log("Found reverse braille value: " + value);
+        if(value == "true"){
+          this.isReverseBraille = true;
+        }else{
+          this.isReverseBraille = false;
+        }
+      })
       this.TurnOnBluetooth();
     }
 
@@ -102,27 +114,20 @@ declare let BrailleKeys:any;
     OnButtonClick(key){
       console.log('Button pressed: ' + key);
       console.log('Button value: ' + Braille.BrailleMap.get(key));
-      if(!this.isConnectedToDevice || this.brailleDevice == null){
-        console.log("Not connected to device...")
-        this.TurnOnBluetooth();
-        return;
-      }
       let value = Braille.BrailleMap.get(key);
       let strVal = Braille.ConvertKeyToPaddedString(value)
       while(strVal.length < 12){
         strVal = strVal.concat('0');
       }
+      if(this.isReverseBraille){
+        strVal = Braille.reverseBrailleEncoding(strVal);
+      }
       this.presentToast('Writing value: ' + strVal);
-      this.bluetoothSerial.write(strVal).then(function(){console.log("Write successful.")},function(){console.log("Write failed.")})
+      this.WriteToBluetooth(strVal);
     }
 
     SendInputMessage(){
       console.log('Attempting to send value: ' + this.inputValue);
-      if(!this.isConnectedToDevice || this.brailleDevice == null){
-        console.log("Not connected to device...")
-        this.TurnOnBluetooth();
-        return;
-      }
       let strVal = "";
       for(let i = this.inputValue.length - 1; i >= 0; i--){
         let val = Braille.BrailleMap.get(this.inputValue.charAt(i))
@@ -131,8 +136,31 @@ declare let BrailleKeys:any;
       while(strVal.length < 12){
         strVal = '0'.concat(strVal);
       }
+      if(this.isReverseBraille){
+        strVal = Braille.reverseBrailleEncoding(strVal);
+      }
       this.presentToast('Writing value: ' + strVal);
-      this.bluetoothSerial.write(strVal).then(function(){console.log("Write successful.")},function(){console.log("Write failed.")})
+      this.WriteToBluetooth(strVal);
+    }
+
+    WriteToBluetooth(stringToSend){
+      if(!this.isConnectedToDevice || this.brailleDevice == null){
+        console.log("Not connected to device...")
+        this.TurnOnBluetooth();
+        return;
+      }
+      this.bluetoothSerial.write(stringToSend).then(function(){console.log("Write successful.")},function(){console.log("Write failed.")})
+    }
+
+    OnReverseToggle(){
+      if(this.isReverseBraille){
+        this.isReverseBraille = false;
+        this.storage.set('reverseBraille',  'false');
+      }
+      else if(!this.isReverseBraille){
+        this.isReverseBraille = true;
+        this.storage.set('reverseBraille', 'true')
+      }
     }
 
 /**
