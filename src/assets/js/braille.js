@@ -1,52 +1,62 @@
 import { concat } from "rxjs/operator/concat";
 
 export let BrailleMap = new Map();
-    BrailleMap.set('a', 128)
-    BrailleMap.set('b', 192)
-    BrailleMap.set('c', 136)
-    BrailleMap.set('d', 140)
-    BrailleMap.set('e', 216)
-    BrailleMap.set('f', 200)
-    BrailleMap.set('g', 204)
-    BrailleMap.set('h', 196)
-    BrailleMap.set('i', 72)
-    BrailleMap.set('j', 88)
-    BrailleMap.set('k', 160)
-    BrailleMap.set('l', 224)
-    BrailleMap.set('m', 176)
-    BrailleMap.set('n', 184)
-    BrailleMap.set('o', 168)
-    BrailleMap.set('p', 240)
-    BrailleMap.set('q', 248)
-    BrailleMap.set('r', 232)
-    BrailleMap.set('s', 112)
-    BrailleMap.set('t', 120)
-    BrailleMap.set('u', 164)
-    BrailleMap.set('v', 228)
-    BrailleMap.set('w', 92)
-    BrailleMap.set('x', 180)
-    BrailleMap.set('y', 188)
-    BrailleMap.set('z', 172)
-    BrailleMap.set('CAP', 4)
-    BrailleMap.set('!', 104)
-    BrailleMap.set('\'', 32)
-    BrailleMap.set(',',64);
-    BrailleMap.set('-',36);
-    BrailleMap.set('.',76);
-    BrailleMap.set('?',100);
-    BrailleMap.set('#',60);
-    BrailleMap.set('0',88);
-    BrailleMap.set('1',128);
-    BrailleMap.set('2',192);
-    BrailleMap.set('3',144);
-    BrailleMap.set('4',152);
-    BrailleMap.set('5',136);
-    BrailleMap.set('6',208);
-    BrailleMap.set('7',216);
-    BrailleMap.set('8',200);
-    BrailleMap.set('9',80);
-    BrailleMap.set(' ', 0);
+    BrailleMap.set('a', '128')
+    BrailleMap.set('b', '192')
+    BrailleMap.set('c', '136')
+    BrailleMap.set('d', '140')
+    BrailleMap.set('e', '216')
+    BrailleMap.set('f', '200')
+    BrailleMap.set('g', '204')
+    BrailleMap.set('h', '196')
+    BrailleMap.set('i', '072')
+    BrailleMap.set('j', '088')
+    BrailleMap.set('k', '160')
+    BrailleMap.set('l', '224')
+    BrailleMap.set('m', '176')
+    BrailleMap.set('n', '184')
+    BrailleMap.set('o', '168')
+    BrailleMap.set('p', '240')
+    BrailleMap.set('q', '248')
+    BrailleMap.set('r', '232')
+    BrailleMap.set('s', '112')
+    BrailleMap.set('t', '120')
+    BrailleMap.set('u', '164')
+    BrailleMap.set('v', '228')
+    BrailleMap.set('w', '092')
+    BrailleMap.set('x', '180')
+    BrailleMap.set('y', '188')
+    BrailleMap.set('z', '172')
+    BrailleMap.set('CAP', '004')
+    BrailleMap.set('!', '104')
+    BrailleMap.set('\'', '032')
+    BrailleMap.set(',','064');
+    BrailleMap.set('-','036');
+    BrailleMap.set('.','076');
+    BrailleMap.set('?','100');
+    BrailleMap.set('#','060');
+    BrailleMap.set('0','088');
+    BrailleMap.set('1','128');
+    BrailleMap.set('2','192');
+    BrailleMap.set('3','144');
+    BrailleMap.set('4','152');
+    BrailleMap.set('5','136');
+    BrailleMap.set('6','208');
+    BrailleMap.set('7','216');
+    BrailleMap.set('8','200');
+    BrailleMap.set('9','080');
+    BrailleMap.set(' ', '000');
 
+
+
+
+  export function GetBrailleValueFromKey(key){
+    let val = BrailleMap.get(key);
+    while(val.length < 3){
+      val = val.concat('0');
+    }
+    return val;
+  }
 
   //Helper function to convert decimal to it's binary representation
   //for verification
@@ -97,29 +107,7 @@ export let BrailleMap = new Map();
     return Array.from(map.keys());
   }
 
-/**
- * Converts the input number 'key' to a string of length three, padding
- * with zeros if nessesary
- * @param {*} key Number from 0 to 255
- */
-  export function ConvertKeyToPaddedString(key){
-    if(!Number.isInteger(key)){
-      console.log("Key " +key+" is not an integer.")
-      return;
-    }
-    if(key > 255 || key < 0){
-      console.log("Key is out of range scope.")
-      return;
-    }
-    var retStr = key.toString();
-    while(retStr.length < 3){
-      retStr = "0".concat(retStr)
-    }
-    console.log("Key converted to: " + retStr)
-    return retStr;
 
-
-  }
 
 
   export function reverseString(str) {
@@ -149,34 +137,35 @@ export let BrailleMap = new Map();
 
 
 
-   //Main method to convert string to braille
+   /**
+    * Main method to convert string to braille.
+    * @export
+    * @param {string} inputString
+    * @returns a string with Braille Encodings
+    */
    export function convertStringToBraille(inputString){
      if(!inputString || typeof(inputString) != "string"){
        console.log("Input is not a string or undefined.")
        return null;
      }
+    console.log("braille.ConvertStringToBraille input: " + inputString);
     let BrailleStr = ""; /*Final return output with the braille encodings*/
-    let currToken = ""; /*Current token/word being worked on inside the main look*/
+    let currToken = "";
     for(let i = 0; i < inputString.length; i++){ /*Main parsing loop*/
-      currChar = inputString.charAt(i);
-      if(currChar != " "){/** If the current character is a letter/punctuation */
-        let brailleChars = GetBrailleEncoding(currChar);
-        if(!brailleChar){
-          currToken = currToken.concat(brailleChars);
-        }
-        else{
-          console.log("Could not receive Braille mapping for " + currChar);
-          let brailleChar = GetBrailleEncoding(" ");
-          currToken = currToken.concat(brailleChar);
-        }
+      let currChar = inputString.charAt(i);
+      let brailleChar = GetBrailleEncoding(currChar);
+      if(!brailleChar){ //no encoding received
+        console.log("braille.convertStringToBraille: no encoding found, retreving encoding for ' '.");
+        brailleChar = GetBrailleEncoding(" ");
       }
-      else if(currChar == " " || i == (inputString.length - 1)){ /**If end of string is reached or a space is encountered*/
-        /** Append the current token to the BrailleStr, and empty the token. */
-        BrailleStr.concat(currToken);
+      currToken = currToken.concat(brailleChar);
+      //if a space is encountered (meaning a new work has begun) or the end of the string is reached
+      if(currChar == " " || inputString.length - 1 == i){
+        BrailleStr = BrailleStr.concat(currToken);
         currToken = "";
       }
     }
-    console.log("Final braille string is: \n" + BrailleStr);
+    console.log("braille.convertStringToBraille: final braille string is: \n" + BrailleStr);
     return BrailleStr;
    }
 
@@ -186,24 +175,28 @@ export let BrailleMap = new Map();
     */
    function GetBrailleEncoding(inputChar){
     if(!inputChar || typeof(inputChar) != 'string' || inputChar.length != 1){
-      console.log("Input Character is not a type of String.");
+      console.log("braille.GetBrailleEncoding: Input Character is not a type of String.");
       return;
     }
+    console.log("braille.GetBrailleEncoding: Attempting to find encoding for: " + inputChar);
     let RetBrailleStr = "";
     if(!isNaN(inputChar*1)){/**Check if character is a number */
-      RetBrailleStr.concat(BrailleMap.get('#'));
-      RetBrailleStr.concat(BrailleMap.get(inputChar));
-
+      RetBrailleStr = RetBrailleStr.concat(GetBrailleValueFromKey('#'));
+      RetBrailleStr = RetBrailleStr.concat(GetBrailleValueFromKey(inputChar));
+      console.log("braille.GetBrailleEncoding: Found a number.");
     }
     else{/**Character is a letter */
-      if(inputChar == inputChar.toUpperCase){
-        RetBrailleStr.concat(BrailleMap.get('CAP'));
-        RetBrailleStr.concat(BrailleMap.get(inputChar));
+      if(inputChar == inputChar.toUpperCase()){
+        RetBrailleStr = RetBrailleStr.concat(GetBrailleValueFromKey('CAP'));
+        RetBrailleStr = RetBrailleStr.concat(GetBrailleValueFromKey(inputChar.toLowerCase()));
+        console.log("braille.GetBrailleEncoding: Found a capital letter.");
       }
       else{
-        RetBrailleStr.concat(BrailleMap.get(inputChar));
+        RetBrailleStr = RetBrailleStr.concat(GetBrailleValueFromKey(inputChar));
+        console.log("braille.GetBrailleEncoding: Found a letter.");
       }
     }
+    console.log("braille.GetBrailleEncoding: Returning " + RetBrailleStr);
     return RetBrailleStr;
    }
 
