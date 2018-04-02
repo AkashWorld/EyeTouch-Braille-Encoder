@@ -20,6 +20,7 @@
   <button ion-button round (click)="SendInputMessage()">SEND</button>
   <button ion-button round (click)="TurnOnBluetooth()" *ngIf="isConnectedToDevice == false">Connect to Braille Device</button>
   <ion-spinner name='crescent' *ngIf="isConnectedToDevice == false"></ion-spinner>
+  <button ion-button round (click)="OpenTextReaderPage()">Open Text Reader</button>
   <button ion-button round (click)="OnReverseToggle()">Reverse Order</button>
   <ion-label>{{"Braille Order Reversed: " + isReverseBraille}}</ion-label>
 </ion-content>

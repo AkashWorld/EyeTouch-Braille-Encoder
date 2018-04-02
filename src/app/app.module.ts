@@ -7,13 +7,15 @@ import { IonicStorageModule } from '@ionic/storage'
 
 import { MyApp } from './app.component';
 import { TestPage } from '../pages/test/test';
-import {BTsetupPage} from '../pages/btsetup/btsetup'
-import {BluetoothSerial} from '@ionic-native/bluetooth-serial'
+import { TextReaderPage } from '../pages/textreader/textreader';
+import {BTsetupPage} from '../pages/btsetup/btsetup';
+import {BluetoothSerial} from '@ionic-native/bluetooth-serial';
 @NgModule({
   declarations: [
     MyApp,
     TestPage,
-    BTsetupPage
+    BTsetupPage,
+    TextReaderPage
   ],
   imports: [
     BrowserModule,
@@ -24,7 +26,8 @@ import {BluetoothSerial} from '@ionic-native/bluetooth-serial'
   entryComponents: [
     MyApp,
     TestPage,
-    BTsetupPage
+    BTsetupPage,
+    TextReaderPage
   ],
   providers: [
     StatusBar,

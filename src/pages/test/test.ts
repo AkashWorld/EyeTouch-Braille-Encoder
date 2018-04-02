@@ -5,6 +5,7 @@ import * as Braille from '../../assets/js/braille.js'
 import * as TextHolder from '../../assets/js/textHolder.js'
 import { NgZone } from '@angular/core';
 import {Storage} from '@ionic/storage'
+import { TextReaderPage } from '../textreader/textreader';
 @Component({
   selector: 'page-test',
   templateUrl: 'test.html'
@@ -19,7 +20,7 @@ import {Storage} from '@ionic/storage'
     btStatus = "Not connected."
     inputValue = "";
     constructor(public toastCtrl: ToastController, public bluetoothSerial: BluetoothSerial,
-       public ngZone: NgZone, public storage: Storage){
+       public ngZone: NgZone, public storage: Storage, private navCtr: NavController){
       console.log("HomePage controller")
       console.log(Braille.BrailleMap)
       console.log(this.BrailleKeys)
@@ -59,7 +60,10 @@ import {Storage} from '@ionic/storage'
       this.WriteToBluetooth(strVal);
     }
 
-
+    OpenTextReaderPage(){
+      console.log('Attempting to open Text Reader...');
+      this.navCtr.push(TextReaderPage);
+    }
 
     /**
      * Checks if bluetooth is on, and turns it on if not. After, it starts the
