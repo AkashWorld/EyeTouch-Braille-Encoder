@@ -4,16 +4,19 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { IonicStorageModule } from '@ionic/storage'
+import { AndroidPermissions } from '@ionic-native/android-permissions'
 
 import { MyApp } from './app.component';
 import { TestPage } from '../pages/test/test';
-import {BTsetupPage} from '../pages/btsetup/btsetup'
-import {BluetoothSerial} from '@ionic-native/bluetooth-serial'
+import { TextReaderPage } from '../pages/textreader/textreader';
+import {BTsetupPage} from '../pages/btsetup/btsetup';
+import {BluetoothSerial} from '@ionic-native/bluetooth-serial';
 @NgModule({
   declarations: [
     MyApp,
     TestPage,
-    BTsetupPage
+    BTsetupPage,
+    TextReaderPage
   ],
   imports: [
     BrowserModule,
@@ -24,12 +27,14 @@ import {BluetoothSerial} from '@ionic-native/bluetooth-serial'
   entryComponents: [
     MyApp,
     TestPage,
-    BTsetupPage
+    BTsetupPage,
+    TextReaderPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     BluetoothSerial,
+    AndroidPermissions,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

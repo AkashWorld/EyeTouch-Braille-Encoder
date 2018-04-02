@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { TestPage } from '../pages/test/test';
 import { BTsetupPage } from '../pages/btsetup/btsetup';
+import { TextReaderPage } from './../pages/textreader/textreader';
 @Component({
   templateUrl: 'app.html'
 })
