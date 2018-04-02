@@ -4,6 +4,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { IonicStorageModule } from '@ionic/storage'
+import { AndroidPermissions } from '@ionic-native/android-permissions'
 
 import { MyApp } from './app.component';
 import { TestPage } from '../pages/test/test';
@@ -33,6 +34,7 @@ import {BluetoothSerial} from '@ionic-native/bluetooth-serial';
     StatusBar,
     SplashScreen,
     BluetoothSerial,
+    AndroidPermissions,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

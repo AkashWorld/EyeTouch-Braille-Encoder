@@ -5,3 +5,13 @@
     </ion-title>
   </ion-navbar>
 </ion-header>
+
+<ion-list>
+  <ion-item *ngFor="let x of messages">
+  <ion-avatar item-start>
+  <button ion-button color="danger" round>{{x.address.charAt(0)}}</button>
+  </ion-avatar>
+  <h2>{{x.address}}</h2>
+  <p>{{x.body}}</p>
+  </ion-item>
+  </ion-list>

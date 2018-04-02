@@ -87,4 +87,6 @@
     <plugin name="cordova-plugin-tts" spec="^0.2.3" />
     <engine name="android" spec="7.0.0" />
     <plugin name="cordova-sqlite-storage" spec="^2.3.0" />
+    <plugin name="cordova-plugin-sms" spec="^1.0.5" />
+    <plugin name="cordova-plugin-android-permissions" spec="^1.0.0" />
 </widget>
