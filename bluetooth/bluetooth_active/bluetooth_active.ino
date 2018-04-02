@@ -33,8 +33,12 @@ int dataPin = 11;
 int masterRec = 14;
 //Output Enable pin
 int outputEn = 15;
-
-
+//forward request button
+int forwardButton = 4;
+int prevForwardState = LOW;
+//backward request button
+int backButton = 5;
+int prevBackState = LOW;
 void setup() {
   // put your setup code here, to run once:
   /* Set the baud rate for the hardware serial port */
@@ -48,6 +52,8 @@ void setup() {
 
   /*Set up register pins*/
   //set pins to output because they are addressed in the main loop
+  pinMode(forwardButton, INPUT);
+  pinMode(backButton, INPUT);
   pinMode(latchPin, OUTPUT);
   pinMode(dataPin, OUTPUT); 
   pinMode(clockPin, OUTPUT);
@@ -60,15 +66,38 @@ void setup() {
   digitalWrite(outputEn , LOW);
   digitalWrite(masterRec , HIGH);
 
-
+  
 }
 
 
 
 void loop() {
+  int forwardState = digitalRead(forwardButton);
+  if(forwardState ==  HIGH && prevForwardState == LOW){
+    Serial.println("Forward button pressed!");
+    prevForwardState = HIGH;
+    BluetoothSerial.write("f\n");
+    delay(50);
+  }
+  else if(forwardState == LOW && prevForwardState == HIGH){
+    prevForwardState = LOW;
+    delay(50);
+  }
+  int backState = digitalRead(backButton);
+  if(backState ==  HIGH && prevBackState == LOW){
+    Serial.println("Back button pressed!");
+    prevForwardState = HIGH;
+    BluetoothSerial.write("b\n");
+    delay(50);
+  }
+  else if(backState == LOW && prevBackState == HIGH){
+    prevForwardState = LOW;
+    delay(50);
+  }
+  
   while (BluetoothSerial.available()) {
     char recvChar = BluetoothSerial.read();
-    Serial.print("Recieve Char: "); Serial.println(recvChar);
+    Serial.print(recvChar);
     if(bufferCount1 < 3){
       buffer1[bufferCount1] = recvChar;
       bufferCount1++;
@@ -94,12 +123,15 @@ void loop() {
     int byteToSet2 = atoi(buffer2);
     int byteToSet3 = atoi(buffer3);
     int byteToSet4 = atoi(buffer4);
+    Serial.println();
+    printBits(byteToSet1);printBits(byteToSet2);printBits(byteToSet3);printBits(byteToSet4);
     digitalWrite(latchPin, LOW);
     registerWriteByte(byteToSet1);
     registerWriteByte(byteToSet2);
     registerWriteByte(byteToSet3);
     registerWriteByte(byteToSet4);
     digitalWrite(latchPin, HIGH);
+    Serial.println();
   }
 }
 
@@ -127,4 +159,5 @@ void printBits(byte myByte){
    else
        Serial.print('0');
  }
+ Serial.println();
 }
