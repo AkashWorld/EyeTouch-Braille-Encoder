@@ -2,10 +2,9 @@ import { Component } from '@angular/core';
 import { NavController, ToastController } from 'ionic-angular';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 import * as Braille from '../../assets/js/braille.js'
+import * as TextHolder from '../../assets/js/textHolder.js'
 import { NgZone } from '@angular/core';
 import {Storage} from '@ionic/storage'
-
-declare let BrailleKeys:any;
 @Component({
   selector: 'page-test',
   templateUrl: 'test.html'
@@ -19,7 +18,6 @@ declare let BrailleKeys:any;
     isReverseBraille = false;
     btStatus = "Not connected."
     inputValue = "";
-
     constructor(public toastCtrl: ToastController, public bluetoothSerial: BluetoothSerial,
        public ngZone: NgZone, public storage: Storage){
       console.log("HomePage controller")
@@ -35,6 +33,33 @@ declare let BrailleKeys:any;
       })
       this.TurnOnBluetooth();
     }
+
+
+    OnButtonClick(key){
+      console.log('Button pressed: ' + key);
+      console.log('Button value: ' + Braille.BrailleMap.get(key));
+      TextHolder.brailleHolder.SetBrailleText(key);
+      let strVal = TextHolder.brailleHolder.GetASetOfBrailleText(true);
+      console.log(TextHolder.brailleHolder);
+      if(this.isReverseBraille){
+        strVal = Braille.reverseBrailleEncoding(strVal);
+      }
+      this.presentToast('Writing value: ' + strVal);
+      this.WriteToBluetooth(strVal);
+    }
+
+    SendInputMessage(){
+      console.log('Attempting to send value: ' + this.inputValue);
+      TextHolder.brailleHolder.SetBrailleText(this.inputValue);
+      let strVal = TextHolder.brailleHolder.GetASetOfBrailleText(true);
+      if(this.isReverseBraille){
+        strVal = Braille.reverseBrailleEncoding(strVal);
+      }
+      this.presentToast('Writing value: ' + strVal);
+      this.WriteToBluetooth(strVal);
+    }
+
+
 
     /**
      * Checks if bluetooth is on, and turns it on if not. After, it starts the
@@ -111,37 +136,7 @@ declare let BrailleKeys:any;
       this.TurnOnBluetooth();
     }
 
-    OnButtonClick(key){
-      console.log('Button pressed: ' + key);
-      console.log('Button value: ' + Braille.BrailleMap.get(key));
-      let value = Braille.BrailleMap.get(key);
-      let strVal = Braille.ConvertKeyToPaddedString(value)
-      while(strVal.length < 12){
-        strVal = strVal.concat('0');
-      }
-      if(this.isReverseBraille){
-        strVal = Braille.reverseBrailleEncoding(strVal);
-      }
-      this.presentToast('Writing value: ' + strVal);
-      this.WriteToBluetooth(strVal);
-    }
 
-    SendInputMessage(){
-      console.log('Attempting to send value: ' + this.inputValue);
-      let strVal = "";
-      for(let i = this.inputValue.length - 1; i >= 0; i--){
-        let val = Braille.BrailleMap.get(this.inputValue.charAt(i))
-        strVal = strVal.concat(Braille.ConvertKeyToPaddedString(val))
-      }
-      while(strVal.length < 12){
-        strVal = '0'.concat(strVal);
-      }
-      if(this.isReverseBraille){
-        strVal = Braille.reverseBrailleEncoding(strVal);
-      }
-      this.presentToast('Writing value: ' + strVal);
-      this.WriteToBluetooth(strVal);
-    }
 
     WriteToBluetooth(stringToSend){
       if(!this.isConnectedToDevice || this.brailleDevice == null){
