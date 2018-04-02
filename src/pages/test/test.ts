@@ -149,6 +149,21 @@ import { TextReaderPage } from '../textreader/textreader';
         this.isConnectedToDevice = true;
         this.btStatus = "Braille device connected!"
       });
+      let subscription = this.bluetoothSerial.subscribe('\n').subscribe((input)=>this.RespondToBluetooth(input), ()=>{
+        console.log("Error subscribing");
+      });
+
+    }
+
+    RespondToBluetooth(input){
+      console.log("String received from Bluetooth device '" + input + "' of size " + input.length);
+      this.presentToast("Received from Bluetooth: " + input);
+      if(input == "f\n"){
+        this.OnMessageForward();
+      }
+      else if(input == "b\n"){
+        this.OnMessageBackward();
+      }
     }
 
     DisonnectedFromDevice(){
