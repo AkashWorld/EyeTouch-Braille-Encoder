@@ -18,13 +18,13 @@
     <ion-input [(ngModel)] = "inputValue"></ion-input>
   </ion-item>
   <button ion-button round color="secondary" (click)="SendInputMessage()">SEND</button>
+  <button ion-button round (click)="OnMessageBackward()"><-</button>
+  <button ion-button round (click)="OnMessageForward()">-></button>
   <button ion-button round (click)="TurnOnBluetooth()" *ngIf="isConnectedToDevice == false">Connect to Braille Device</button>
   <button ion-button round color="danger" (click)="OpenTextReaderPage()">Open SMS</button>
   <button ion-button round color="guilded" (click)="OnReverseToggle()" *ngIf="isReverseBraille == true">Reverse Order</button>
   <button ion-button round color="royal" (click)="OnReverseToggle()" *ngIf="isReverseBraille == false">Reverse Order</button>
   <ion-spinner name='crescent' *ngIf="isConnectedToDevice == false"></ion-spinner>
 </ion-content>
-<ion-content id="spinnerHolder">
 
-</ion-content>
 

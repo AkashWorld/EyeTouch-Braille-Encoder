@@ -40,7 +40,7 @@ import { TextReaderPage } from '../textreader/textreader';
       console.log('Button pressed: ' + key);
       console.log('Button value: ' + Braille.BrailleMap.get(key));
       TextHolder.brailleHolder.SetBrailleText(key);
-      let strVal = TextHolder.brailleHolder.GetASetOfBrailleText(true);
+      let strVal = TextHolder.brailleHolder.GetASetOfBrailleText(true, 0);
       console.log(TextHolder.brailleHolder);
       if(this.isReverseBraille){
         strVal = Braille.reverseBrailleEncoding(strVal);
@@ -52,7 +52,7 @@ import { TextReaderPage } from '../textreader/textreader';
     SendInputMessage(){
       console.log('Attempting to send value: ' + this.inputValue);
       TextHolder.brailleHolder.SetBrailleText(this.inputValue);
-      let strVal = TextHolder.brailleHolder.GetASetOfBrailleText(true);
+      let strVal = TextHolder.brailleHolder.GetASetOfBrailleText(true, 0);
       if(this.isReverseBraille){
         strVal = Braille.reverseBrailleEncoding(strVal);
       }
@@ -63,6 +63,28 @@ import { TextReaderPage } from '../textreader/textreader';
     OpenTextReaderPage(){
       console.log('Attempting to open Text Reader...');
       this.navCtr.push(TextReaderPage);
+    }
+
+    OnMessageForward(){
+      console.log('Attempting to forward the Braille set by one character');
+      TextHolder.brailleHolder.SetBrailleText(this.inputValue);
+      let strVal = TextHolder.brailleHolder.GetASetOfBrailleText(true, 1);
+      if(this.isReverseBraille){
+        strVal = Braille.reverseBrailleEncoding(strVal);
+      }
+      this.presentToast('Writing value: ' + strVal);
+      this.WriteToBluetooth(strVal);
+    }
+
+    OnMessageBackward(){
+      console.log('Attempting to move backward the Braille set by one character');
+      TextHolder.brailleHolder.SetBrailleText(this.inputValue);
+      let strVal = TextHolder.brailleHolder.GetASetOfBrailleText(false, 1);
+      if(this.isReverseBraille){
+        strVal = Braille.reverseBrailleEncoding(strVal);
+      }
+      this.presentToast('Writing value: ' + strVal);
+      this.WriteToBluetooth(strVal);
     }
 
     /**
