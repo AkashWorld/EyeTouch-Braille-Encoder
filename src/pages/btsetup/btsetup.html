@@ -7,19 +7,19 @@
 </ion-header>
 
 <ion-content padding>
-  <div>
+  <div text-center>
       <ion-label>{{btStatus}}</ion-label>
   </div>
-  <div>
+  <div text-center>
       <ion-spinner name='crescent' *ngIf="isConnectedToDevice == false"></ion-spinner>
   </div>
-  <div>
+  <div text-center>
       <button ion-button round style="text-align:center" (click)="TurnOnBluetooth()" *ngIf="isConnectedToDevice == false">Connect to Braille Device</button>
   </div>
-  <div>
+  <div text-center>
       <button ion-button round style="text-align:center" (click)="OpenTestPage()">Open Test</button>
   </div>
-  <div>
+  <div text-center>
       <button ion-button round style="text-align:center" (click)="OpenSpeechUI()">Open Speech UI</button>
   </div>
 </ion-content>

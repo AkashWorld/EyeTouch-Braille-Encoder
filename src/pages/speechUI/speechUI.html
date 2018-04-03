@@ -7,5 +7,10 @@
 </ion-header>
 
 <ion-content>
-    <button ion-button round color="danger" style="text-align:center" (click)="OpenTestPage()">Open Test Menu</button>
+  <div text-center>
+      <button ion-button round color="danger"  (click)="OpenTestPage()">Open Test Menu</button>
+  </div>
+  <div text-center id = "SpeechButton">
+    <button ion-button round (dblclick)="StartSpeechRecognition()">Detect Speech</button>
+  </div>
 </ion-content>

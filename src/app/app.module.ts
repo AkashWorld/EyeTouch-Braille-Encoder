@@ -1,3 +1,4 @@
+import { SpeechRecognition } from '@ionic-native/speech-recognition';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -5,6 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { IonicStorageModule } from '@ionic/storage'
 import { AndroidPermissions } from '@ionic-native/android-permissions'
+import { TextToSpeech } from '@ionic-native/text-to-speech'
 
 import { SpeechUIPage } from './../pages/speechUI/speechUI';
 import { MyApp } from './app.component';
@@ -38,6 +40,8 @@ import {BluetoothSerial} from '@ionic-native/bluetooth-serial';
     SplashScreen,
     BluetoothSerial,
     AndroidPermissions,
+    SpeechRecognition,
+    TextToSpeech,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

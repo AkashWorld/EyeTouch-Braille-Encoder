@@ -34,7 +34,7 @@ import { BTsetupPage } from '../btsetup/btsetup';
           this.isReverseBraille = false;
         }
       })
-      this.bluetoothSerial.isConnected().then(()=>this.ConnectedToDevice(),()=>this.DisonnectedFromDevice());
+      this.bluetoothSerial.isConnected().then(()=>this.ConnectedToDevice(),()=>console.log("Error receiving permission!"));
     }
 
 
@@ -116,20 +116,6 @@ import { BTsetupPage } from '../btsetup/btsetup';
         this.OnMessageBackward();
       }
     }
-
-    DisonnectedFromDevice(){
-      this.ngZone.run(()=>{
-        //Asynchronous promise
-        this.isConnectedToDevice = false;
-        this.btStatus = "Not connected."
-      });
-      console.log("Disconnected from BRAILLE device...")
-      this.presentToast("Disconnected from BRAILLE device...")
-      this.brailleDevice = null;
-      this.navCtr.popToRoot();
-    }
-
-
 
     WriteToBluetooth(stringToSend){
       this.bluetoothSerial.write(stringToSend).then(function(){console.log("Write successful.")},function(){console.log("Write failed.")})
