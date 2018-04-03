@@ -1,59 +1,59 @@
 import { concat } from "rxjs/operator/concat";
 
 export let BrailleMap = new Map();
-    BrailleMap.set('a', '128')
-    BrailleMap.set('b', '192')
-    BrailleMap.set('c', '136')
-    BrailleMap.set('d', '140')
-    BrailleMap.set('e', '216')
-    BrailleMap.set('f', '200')
-    BrailleMap.set('g', '204')
-    BrailleMap.set('h', '196')
-    BrailleMap.set('i', '072')
-    BrailleMap.set('j', '088')
-    BrailleMap.set('k', '160')
-    BrailleMap.set('l', '224')
-    BrailleMap.set('m', '176')
-    BrailleMap.set('n', '184')
-    BrailleMap.set('o', '168')
-    BrailleMap.set('p', '240')
-    BrailleMap.set('q', '248')
-    BrailleMap.set('r', '232')
-    BrailleMap.set('s', '112')
-    BrailleMap.set('t', '120')
-    BrailleMap.set('u', '164')
-    BrailleMap.set('v', '228')
-    BrailleMap.set('w', '092')
-    BrailleMap.set('x', '180')
-    BrailleMap.set('y', '188')
-    BrailleMap.set('z', '172')
-    BrailleMap.set('CAP', '004')
-    BrailleMap.set('!', '104')
-    BrailleMap.set('\'', '032')
-    BrailleMap.set(',','064');
-    BrailleMap.set('-','036');
-    BrailleMap.set('.','076');
-    BrailleMap.set('?','100');
-    BrailleMap.set('#','060');
-    BrailleMap.set('0','088');
-    BrailleMap.set('1','128');
-    BrailleMap.set('2','192');
-    BrailleMap.set('3','144');
-    BrailleMap.set('4','152');
-    BrailleMap.set('5','136');
-    BrailleMap.set('6','208');
-    BrailleMap.set('7','216');
-    BrailleMap.set('8','200');
-    BrailleMap.set('9','080');
-    BrailleMap.set(' ', '000');
+    BrailleMap.set('a', 128)
+    BrailleMap.set('b', 192)
+    BrailleMap.set('c', 144)
+    BrailleMap.set('d', 152)
+    BrailleMap.set('e', 136)
+    BrailleMap.set('f', 208)
+    BrailleMap.set('g', 216)
+    BrailleMap.set('h', 200)
+    BrailleMap.set('i', 80)
+    BrailleMap.set('j', 88)
+    BrailleMap.set('k', 160)
+    BrailleMap.set('l', 224)
+    BrailleMap.set('m', 176)
+    BrailleMap.set('n', 184)
+    BrailleMap.set('o', 168)
+    BrailleMap.set('p', 240)
+    BrailleMap.set('q', 248)
+    BrailleMap.set('r', 232)
+    BrailleMap.set('s', 112)
+    BrailleMap.set('t', 120)
+    BrailleMap.set('u', 164)
+    BrailleMap.set('v', 228)
+    BrailleMap.set('w', 92)
+    BrailleMap.set('x', 180)
+    BrailleMap.set('y', 188)
+    BrailleMap.set('z', 172)
+    BrailleMap.set('CAP', 4)
+    BrailleMap.set('!', 104)
+    BrailleMap.set('\'', 32)
+    BrailleMap.set(',',64);
+    BrailleMap.set('-',36);
+    BrailleMap.set('.',76);
+    BrailleMap.set('?',100);
+    BrailleMap.set('#',60);
+    BrailleMap.set('0',88);
+    BrailleMap.set('1',128);
+    BrailleMap.set('2',192);
+    BrailleMap.set('3',144);
+    BrailleMap.set('4',152);
+    BrailleMap.set('5',136);
+    BrailleMap.set('6',208);
+    BrailleMap.set('7',216);
+    BrailleMap.set('8',200);
+    BrailleMap.set('9',80);
+    BrailleMap.set(' ', 0);
 
 
 
 
   export function GetBrailleValueFromKey(key){
-    let val = BrailleMap.get(key);
+    let val = BrailleMap.get(key) + "";
     while(val.length < 3){
-      val = val.concat('0');
+      val = '0'.concat(val);
     }
     return val;
   }

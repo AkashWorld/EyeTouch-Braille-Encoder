@@ -1,7 +1,12 @@
+import { TextToSpeech } from '@ionic-native/text-to-speech';
+import { TestPage } from './../test/test';
+import { Storage } from '@ionic/storage';
 import { Component } from '@angular/core';
 import { NavController, ToastController } from 'ionic-angular';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 import { NgZone } from '@angular/core';
+import { SpeechUIPage } from '../speechUI/speechUI';
+
 @Component({
   selector: 'page-btsetup',
   templateUrl: 'btsetup.html'
@@ -13,9 +18,18 @@ import { NgZone } from '@angular/core';
     isConnectedToDevice = false;
     btStatus = "Not connected."
 
-    constructor(public toastCtrl: ToastController, public bluetoothSerial: BluetoothSerial, public ngZone: NgZone){
+    constructor(private toastCtrl: ToastController, private bluetoothSerial: BluetoothSerial, private ngZone: NgZone,
+                private navCtrl:NavController, private storage:Storage, private tts: TextToSpeech){
       console.log("BTsetupPage controller")
       this.TurnOnBluetooth();
+    }
+
+    OpenSpeechUI(){
+      this.navCtrl.push(SpeechUIPage);
+    }
+
+    OpenTestPage(){
+      this.navCtrl.push(TestPage);
     }
 
     /**
@@ -23,26 +37,29 @@ import { NgZone } from '@angular/core';
      * sequence to connect to the BRAILLE bluetooth module.
      */
     TurnOnBluetooth(){
+      this.tts.speak('Attempting to connect to Braille Device');
       console.log("Initializing bluetooth connection sequence...")
-      this.bluetoothSerial.isEnabled().then(()=>this.DeviceIsEnabled(),()=>this.EnableDevice());
+      this.bluetoothSerial.isEnabled().then(()=>this.DeviceIsEnabled(),
+      //on device disabled
+      ()=>{this.bluetoothSerial.enable().then(()=>this.DeviceIsEnabled(),
+        //on failed attempt to enable device
+        ()=>{
+        console.log("Bluetooth is disabled...")
+        this.isBTEnabled = false;
+      })});
     }
-
-
-    EnableDevice(){
-      console.log("Attempting to enable bluetooth...")
-      this.bluetoothSerial.enable().then(()=>this.DeviceIsEnabled(),()=>this.DeviceIsDisabled())
-    }
-
 
     DeviceIsEnabled(){
       console.log("Bluetooth is enabled...")
       this.isBTEnabled = true;
-      this.FindBrailleDeviceSequence();
-    }
-
-    DeviceIsDisabled(){
-      console.log("Bluetooth is disabled...")
-      this.isBTEnabled = false;
+      this.storage.get(this.DEVICE_NAME).then((value)=>{
+        console.log("Found BRAILLE address: " + value);
+        console.log("Connecting to device.")
+        this.bluetoothSerial.connect(value).subscribe(()=>this.ConnectedToDevice(), ()=>this.DisonnectedFromDevice());
+      }, ()=>{
+        console.log("Could not find device address in internal storage...");
+        this.FindBrailleDeviceSequence();
+      })
     }
 
 
@@ -64,6 +81,7 @@ import { NgZone } from '@angular/core';
         if(Devices[item].name == this.DEVICE_NAME){
           this.brailleDevice = Devices[item];
           console.log("Braille BT module found!")
+          this.storage.set(this.DEVICE_NAME, this.brailleDevice.address);
           this.bluetoothSerial.connect(this.brailleDevice.address).subscribe(()=>this.ConnectedToDevice(), ()=>this.DisonnectedFromDevice());
         }
       }
@@ -74,15 +92,20 @@ import { NgZone } from '@angular/core';
     }
 
     ConnectedToDevice(){
+      this.navCtrl.popToRoot();
+      this.tts.speak("Connected to Braille Device");
       console.log("Connected to BRAILLE device...")
       this.ngZone.run(() => {
         //Asynchronous promise
         this.isConnectedToDevice = true;
         this.btStatus = "Braille device connected!"
       });
+      this.navCtrl.push(SpeechUIPage);
     }
 
     DisonnectedFromDevice(){
+      this.tts.speak("Disconnected from Braille Device");
+      //TODO POP ALL PAGES TO ROOT ON FINAL RELEASE
       this.ngZone.run(()=>{
         //Asynchronous promise
         this.isConnectedToDevice = false;

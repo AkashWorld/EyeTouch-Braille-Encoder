@@ -6,11 +6,13 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { TestPage } from '../pages/test/test';
 import { BTsetupPage } from '../pages/btsetup/btsetup';
 import { TextReaderPage } from './../pages/textreader/textreader';
+import { SpeechUIPage } from '../pages/speechUI/speechUI';
+
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any = TestPage;
+  rootPage:any = BTsetupPage;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {

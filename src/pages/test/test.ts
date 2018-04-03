@@ -6,6 +6,8 @@ import * as TextHolder from '../../assets/js/textHolder.js'
 import { NgZone } from '@angular/core';
 import {Storage} from '@ionic/storage'
 import { TextReaderPage } from '../textreader/textreader';
+import { SpeechUIPage } from './../speechUI/speechUI';
+import { BTsetupPage } from '../btsetup/btsetup';
 @Component({
   selector: 'page-test',
   templateUrl: 'test.html'
@@ -32,7 +34,7 @@ import { TextReaderPage } from '../textreader/textreader';
           this.isReverseBraille = false;
         }
       })
-      this.TurnOnBluetooth();
+      this.bluetoothSerial.isConnected().then(()=>this.ConnectedToDevice(),()=>console.log("Error receiving permission!"));
     }
 
 
@@ -65,6 +67,11 @@ import { TextReaderPage } from '../textreader/textreader';
       this.navCtr.push(TextReaderPage);
     }
 
+    OpenSpeechUI(){
+      console.log('Attempting to open Speech UI...');
+      this.navCtr.push(SpeechUIPage);
+    }
+
     OnMessageForward(){
       console.log('Attempting to forward the Braille set by one character');
       TextHolder.brailleHolder.SetBrailleText(this.inputValue);
@@ -87,61 +94,6 @@ import { TextReaderPage } from '../textreader/textreader';
       this.WriteToBluetooth(strVal);
     }
 
-    /**
-     * Checks if bluetooth is on, and turns it on if not. After, it starts the
-     * sequence to connect to the BRAILLE bluetooth module.
-     */
-    TurnOnBluetooth(){
-      console.log("Initializing bluetooth connection sequence...")
-      this.bluetoothSerial.isEnabled().then(()=>this.DeviceIsEnabled(),()=>this.EnableDevice());
-    }
-
-
-    EnableDevice(){
-      console.log("Attempting to enable bluetooth...")
-      this.bluetoothSerial.enable().then(()=>this.DeviceIsEnabled(),()=>this.DeviceIsDisabled())
-    }
-
-
-    DeviceIsEnabled(){
-      console.log("Bluetooth is enabled...")
-      this.isBTEnabled = true;
-      this.FindBrailleDeviceSequence();
-    }
-
-    DeviceIsDisabled(){
-      console.log("Bluetooth is disabled...")
-      this.isBTEnabled = false;
-    }
-
-
-    FindBrailleDeviceSequence(){
-      this.btStatus = "Attempting to pair with Braille device..."
-      if(this.isBTEnabled){
-        this.bluetoothSerial.discoverUnpaired().then((Devices)=>this.FindBrailleDevice(Devices),function(){console.log("Unable to list unpaired devices.")})
-      }
-      else{
-        console.log("Cannot list bluetooth devices, must enable bluetooth first!")
-        this.TurnOnBluetooth();
-      }
-    }
-
-    FindBrailleDevice(Devices){
-      console.log("Listing unpaired Bluetooth devices...")
-      console.log(Devices)
-      for(let item in Devices){
-        if(Devices[item].name == this.DEVICE_NAME){
-          this.brailleDevice = Devices[item];
-          console.log("Braille BT module found!")
-          this.bluetoothSerial.connect(this.brailleDevice.address).subscribe(()=>this.ConnectedToDevice(), ()=>this.DisonnectedFromDevice());
-        }
-      }
-      if(this.brailleDevice == null){
-        console.log("Error finding Braille Bluetooth module!")
-        this.FindBrailleDeviceSequence();
-      }
-    }
-
     ConnectedToDevice(){
       console.log("Connected to BRAILLE device...")
       this.ngZone.run(() => {
@@ -149,27 +101,23 @@ import { TextReaderPage } from '../textreader/textreader';
         this.isConnectedToDevice = true;
         this.btStatus = "Braille device connected!"
       });
-    }
-
-    DisonnectedFromDevice(){
-      this.ngZone.run(()=>{
-        //Asynchronous promise
-        this.isConnectedToDevice = false;
-        this.btStatus = "Not connected."
+      let subscription = this.bluetoothSerial.subscribe('\n').subscribe((input)=>this.RespondToBluetooth(input), ()=>{
+        console.log("Error subscribing");
       });
-      console.log("Disconnected from BRAILLE device...")
-      this.brailleDevice = null;
-      this.TurnOnBluetooth();
     }
 
-
+    RespondToBluetooth(input){
+      console.log("String received from Bluetooth device '" + input + "' of size " + input.length);
+      this.presentToast("Received from Bluetooth: " + input);
+      if(input == "f\n"){
+        this.OnMessageForward();
+      }
+      else if(input == "b\n"){
+        this.OnMessageBackward();
+      }
+    }
 
     WriteToBluetooth(stringToSend){
-      if(!this.isConnectedToDevice || this.brailleDevice == null){
-        console.log("Not connected to device...")
-        this.TurnOnBluetooth();
-        return;
-      }
       this.bluetoothSerial.write(stringToSend).then(function(){console.log("Write successful.")},function(){console.log("Write failed.")})
     }
 
