@@ -6,6 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { IonicStorageModule } from '@ionic/storage'
 import { AndroidPermissions } from '@ionic-native/android-permissions'
 
+import { SpeechUIPage } from './../pages/speechUI/speechUI';
 import { MyApp } from './app.component';
 import { TestPage } from '../pages/test/test';
 import { TextReaderPage } from '../pages/textreader/textreader';
@@ -16,7 +17,8 @@ import {BluetoothSerial} from '@ionic-native/bluetooth-serial';
     MyApp,
     TestPage,
     BTsetupPage,
-    TextReaderPage
+    TextReaderPage,
+    SpeechUIPage
   ],
   imports: [
     BrowserModule,
@@ -28,7 +30,8 @@ import {BluetoothSerial} from '@ionic-native/bluetooth-serial';
     MyApp,
     TestPage,
     BTsetupPage,
-    TextReaderPage
+    TextReaderPage,
+    SpeechUIPage
   ],
   providers: [
     StatusBar,
