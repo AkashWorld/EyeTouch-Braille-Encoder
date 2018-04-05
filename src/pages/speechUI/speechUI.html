@@ -1,16 +1,5 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>
-      Speech User Interface
-    </ion-title>
-  </ion-navbar>
-</ion-header>
-
 <ion-content>
   <div text-center>
-      <button ion-button round color="danger"  (click)="OpenTestPage()">Open Test Menu</button>
-  </div>
-  <div text-center id = "SpeechButton">
-    <button ion-button round (dblclick)="StartSpeechRecognition()">Detect Speech</button>
+    <button class = 'screenButton' id = "SpeechButton" ion-button (dblclick)="StartSpeechRecognition()">Detect Speech</button>
   </div>
 </ion-content>

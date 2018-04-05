@@ -1,6 +1,6 @@
 import * as Braille from '../js/braille.js'
 
-function TextHolder() {
+export function TextHolder() {
   this.BrailleText = "";
   this.index = 0;
   this.BrailleEncodingSize = 3;

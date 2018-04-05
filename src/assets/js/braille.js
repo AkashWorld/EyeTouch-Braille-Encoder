@@ -1,5 +1,3 @@
-import { concat } from "rxjs/operator/concat";
-
 export let BrailleMap = new Map();
     BrailleMap.set('a', 128)
     BrailleMap.set('b', 192)
@@ -13,24 +11,24 @@ export let BrailleMap = new Map();
     BrailleMap.set('j', 88)
     BrailleMap.set('k', 160)
     BrailleMap.set('l', 224)
-    BrailleMap.set('m', 176)
-    BrailleMap.set('n', 184)
-    BrailleMap.set('o', 168)
-    BrailleMap.set('p', 240)
-    BrailleMap.set('q', 248)
-    BrailleMap.set('r', 232)
-    BrailleMap.set('s', 112)
-    BrailleMap.set('t', 120)
-    BrailleMap.set('u', 164)
-    BrailleMap.set('v', 228)
-    BrailleMap.set('w', 92)
-    BrailleMap.set('x', 180)
-    BrailleMap.set('y', 188)
-    BrailleMap.set('z', 172)
-    BrailleMap.set('CAP', 4)
-    BrailleMap.set('!', 104)
-    BrailleMap.set('\'', 32)
-    BrailleMap.set(',',64);
+		BrailleMap.set('m', 176)
+		BrailleMap.set('n', 184)
+		BrailleMap.set('o', 168)
+		BrailleMap.set('p', 240)
+		BrailleMap.set('q', 248)
+		BrailleMap.set('r', 232)
+		BrailleMap.set('s', 112)
+		BrailleMap.set('t', 120)
+		BrailleMap.set('u', 164)
+		BrailleMap.set('v', 228)
+		BrailleMap.set('w', 92)
+		BrailleMap.set('x', 180)
+		BrailleMap.set('y', 188)
+		BrailleMap.set('z', 172)
+		BrailleMap.set('CAP', 4)
+		BrailleMap.set('!', 104)
+		BrailleMap.set('\'', 32)
+		BrailleMap.set(',',64);
     BrailleMap.set('-',36);
     BrailleMap.set('.',76);
     BrailleMap.set('?',100);
@@ -176,7 +174,7 @@ export let BrailleMap = new Map();
    function GetBrailleEncoding(inputChar){
     if(!inputChar || typeof(inputChar) != 'string' || inputChar.length != 1){
       console.log("braille.GetBrailleEncoding: Input Character is not a type of String.");
-      return;
+      return null;
     }
     console.log("braille.GetBrailleEncoding: Attempting to find encoding for: " + inputChar);
     let RetBrailleStr = "";

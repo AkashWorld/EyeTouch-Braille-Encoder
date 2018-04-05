@@ -105,7 +105,7 @@ import { SpeechUIPage } from '../speechUI/speechUI';
 
     DisonnectedFromDevice(){
       this.tts.speak("Disconnected from Braille Device");
-      //TODO POP ALL PAGES TO ROOT ON FINAL RELEASE
+      this.navCtrl.popToRoot();
       this.ngZone.run(()=>{
         //Asynchronous promise
         this.isConnectedToDevice = false;
