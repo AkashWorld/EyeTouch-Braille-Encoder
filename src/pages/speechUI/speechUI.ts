@@ -4,8 +4,8 @@ import { Component, NgZone } from '@angular/core';
 import { NavController, ToastController, Platform, NavParams } from 'ionic-angular';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { TestPage } from '../test/test';
-import { TextHolder } from '../../assets/js/textHolder.js';
-import { Braille } from '../../assets/js/braille.js';
+import * as Braille from '../../assets/js/braille.js'
+import * as TextHolder from '../../assets/js/textHolder.js'
 import { SpeechRecognition } from '@ionic-native/speech-recognition';
 import { TextToSpeech } from '@ionic-native/text-to-speech';
 declare let SMS:any;
@@ -68,12 +68,12 @@ export class SpeechUIPage {
       let speech = input[index];
       console.log(speech);
       speech = speech.toLowerCase(); //normalize the text to lower case
-      if(speech.contains('open test')){
+      if(speech.includes('open test')){
         this.OpenTestPage();
         return;
       }
-      else if(speech.contains('sms') || speech.contains('text messages') ||
-              speech.contains('text') || speech.contains('messages')){
+      else if(speech.includes('sms') || speech.includes('text messages') ||
+              speech.includes('text') || speech.includes('messages')){
         this.SendSMSToBraille(this.listSMS);
       }
     }
@@ -97,14 +97,6 @@ export class SpeechUIPage {
         success=>{
           console.log("User granted permission!");
           this.ReadSMSList();
-          if(SMS){
-            SMS.startWatch(console.log("Start watch successful."),console.log("Start watch failed."));
-            document.addEventListener('onSMSArrive',(event)=>function(event){
-              let sms = event.data;
-              console.log("New SMS received: " + event.data);
-              this.listSMS.push(sms);
-            });
-          }
         },
         error=>{
           console.log("User denied permission! " + error);
@@ -134,6 +126,8 @@ export class SpeechUIPage {
      * @param inputMessages [] of SMS objects.
      */
     SendSMSToBraille(inputMessages){
+      console.log("Sending SMS function()");
+      console.log("Input message: " + inputMessages);
       let stringToSend = '';
       for(let index in inputMessages){
         let msg = inputMessages[index];

@@ -119,7 +119,7 @@ export function TextHolder() {
     else if(!isForward){ //Request to shift cells backward
       this.DecrementIndex(shiftAmount);
     }
-    let retStr = this.GetPaddedBrailleText(4);
+    let retStr = this.GetPaddedBrailleText(1);
     return retStr;
   }
 }
